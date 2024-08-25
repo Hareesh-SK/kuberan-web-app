@@ -1,0 +1,17 @@
+<mat-dialog-content class="modal">
+  <div class="modal-content">
+    <h2>Add Sub-Expense</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Text</mat-label>
+      <input matInput [(ngModel)]="textInput">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Number</mat-label>
+      <input matInput type="number" [(ngModel)]="numberInput">
+    </mat-form-field>
+    <div class="actions">
+      <button mat-button (click)="onClose()">Cancel</button>
+      <button mat-raised-button color="primary" (click)="onAddSubExpense()">Add Sub-Expense</button>
+    </div>
+  </div>
+</mat-dialog-content>

@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  background-color: #ffffff; /* Background color for the dialog */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.mat-dialog-content {
+  margin-bottom: 20px;
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logout-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  background-color: #dc3545; /* Red color for logout button */
+  color: white;
+  margin-right: 10px;
+}
+
+.cancel-btn {
+  background-color: #6c757d; /* Gray color for cancel button */
+  color: white;
+}
+
+.logout-btn:hover,
+.cancel-btn:hover {
+  opacity: 0.8; /* Reduce opacity on hover */
+}
+
+/* Ensure no border is applied on focus or active state */
+.logout-btn:focus,
+.cancel-btn:focus,
+.logout-btn:active,
+.cancel-btn:active {
+  outline: none;
+  border: none;
+}

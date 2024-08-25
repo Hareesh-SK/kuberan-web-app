@@ -1,0 +1,103 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="card" style="margin-top: 20px;">
+        <div class="card-body">
+          <form [formGroup]="createForm">
+            <div class="row mb-3">
+              <div class="col">
+                <label>First Name:</label>
+                <input type="text" formControlName="firstName" class="form-control">
+              </div>
+              <div class="col">
+                <label>Last Name:</label>
+                <input type="text" formControlName="lastName" class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label>Age:</label>
+                <input type="number" formControlName="age" class="form-control">
+              </div>
+              <div class="col">
+                <label>Phone Number:</label>
+                <input type="text" formControlName="phoneNumber" class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label>Email Id:</label>
+                <input type="email" formControlName="emailId" class="form-control">
+              </div>
+              <div class="col">
+                <label>City:</label>
+                <input type="text" formControlName="city" class="form-control">
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label>Profession:</label>
+                <select formControlName="profession" class="form-control">
+                  <option value="">Select Profession</option>
+                  <option value="Salaried">Salaried employee</option>
+                  <option value="Business">Businessman</option>
+                  <option value="Student">Student</option>
+                </select>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label>Password:</label>
+                <div class="input-group">
+                  <input type="password" formControlName="password" class="form-control" [type]="passwordFieldType">
+                  <span class="input-group-text" (click)="togglePassword('password')">
+                    <i class="bi bi-eye" [class.bi-eye]="passwordFieldType === 'password'"
+                      [class.bi-eye-slash]="passwordFieldType === 'text'"></i>
+                  </span>
+                </div>
+                <div
+                  *ngIf="createForm.get('password').invalid && (createForm.get('password').dirty || createForm.get('password').touched)"
+                  class="text-danger mt-1">
+                  <div *ngIf="createForm.get('password').errors['required']">
+                    Password is required.
+                  </div>
+                  <div *ngIf="createForm.get('password').errors['minlength']">
+                    Password must be at least 6 characters long.
+                  </div>
+                  <div *ngIf="createForm.get('password').errors['pattern']">
+                    Password must include at least 1 special character, 1 capital letter, and 1 number.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col">
+                <label>Confirm Password:</label>
+                <div class="input-group">
+                  <input type="password" formControlName="confirmPassword" class="form-control"
+                    [type]="confirmPasswordFieldType">
+                  <span class="input-group-text" (click)="togglePassword('confirmPassword')">
+                    <i class="bi bi-eye" [class.bi-eye]="confirmPasswordFieldType === 'password'"
+                      [class.bi-eye-slash]="confirmPasswordFieldType === 'text'"></i>
+                  </span>
+                </div>
+                <div
+                  *ngIf="createForm.get('confirmPassword').invalid && (createForm.get('confirmPassword').dirty || createForm.get('confirmPassword').touched)"
+                  class="text-danger mt-1">
+                  <div *ngIf="createForm.get('confirmPassword').errors['required']">
+                    Confirm Password is required.
+                  </div>
+                  <div *ngIf="createForm.get('confirmPassword').errors['passwordMismatch']">
+                    Passwords do not match.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" (click)="submitForm()">Submit</button> &nbsp;
+            <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

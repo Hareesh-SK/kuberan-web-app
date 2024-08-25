@@ -1,0 +1,115 @@
+/* Existing styles for sidebar */
+.sidebar {
+  width: 250px;
+  transition: width 0.3s;
+  position: fixed;
+  height: 100%;
+  background-color: #f8f9fa;
+  overflow-x: hidden;
+}
+
+.sidebar.closed {
+  width: 60px;
+}
+
+.toggle-container {
+  display: flex;
+  align-items: center;
+  padding: 10px; /* Adjust padding as needed */
+}
+
+.toggle-icon {
+  cursor: pointer;
+}
+
+.toggle-text {
+  font-weight: bold;
+  margin-left: 10px; /* Space between icon and text */
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar ul li mat-icon {
+  justify-content: center;
+}
+
+.sidebar.closed .toggle-text {
+  display: none;
+}
+
+.content {
+  margin-left: 250px;
+  position: absolute;
+  transition: margin-left 0.3s;
+}
+
+.sidebar.closed + .content {
+  margin-left: 60px;
+}
+
+.sidebar.closed ul li span {
+  display: none;
+}
+
+.logout-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  transition: width 0.3s;
+  width: 250px; /* Initially match open sidebar width */
+}
+
+.logout-container.closed {
+  width: 60px;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none; /* Ensure no border */
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  outline: none; /* Ensure no outline */
+}
+
+.logout-btn:focus {
+  outline: none; /* Remove focus outline */
+}
+
+.logout-btn mat-icon {
+  margin-right: 10px;
+}
+
+.logout-text {
+  flex-grow: 1;
+  font-size: inherit;
+  font-size: x-large;
+  padding-left: 40px;
+}

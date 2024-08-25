@@ -1,0 +1,55 @@
+<div class="flow-chart">
+  <div class="top-right">
+    <button mat-raised-button color="primary" (click)="saveData()">Save</button>
+  </div>
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter main expense</mat-label>
+      <input matInput [(ngModel)]="inputData">
+    </mat-form-field> &nbsp;
+    <button mat-raised-button [disabled]="!inputData" color="primary" (click)="addMainExpense()">Add</button>
+  </div>
+  <div *ngFor="let node of dataTree; let i = index" class="node">
+    <div>
+      <ng-container *ngIf="node !== editingNode; else editMode">
+        {{ node.data }}
+        <span class="icons">
+          <button mat-icon-button color="primary" (click)="editMainExpense(node)">
+            <mat-icon>edit</mat-icon> <!-- Edit icon -->
+          </button>
+          <button mat-icon-button color="warn" (click)="removeMainExpense(i)">
+            <mat-icon>delete</mat-icon> <!-- Delete icon -->
+          </button>
+          <span class="add-sub-expense" (click)="addSubExpense(node)">
+            <i class="fa fa-plus-circle"></i> <!-- Replace with your preferred icon -->
+          </span>
+        </span>
+      </ng-container>
+      <ng-template #editMode>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="editedData" placeholder="Edit expense">
+        </mat-form-field>
+        <span class="icons">
+          <button mat-icon-button color="primary" (click)="saveEditedExpense(node)">
+            <mat-icon>done</mat-icon> <!-- Save (tick) icon -->
+          </button>
+          <button mat-icon-button color="warn" (click)="cancelEdit()">
+            <mat-icon>close</mat-icon> <!-- Cancel (cross) icon -->
+          </button>
+        </span>
+      </ng-template>
+    </div>
+    <div *ngFor="let branch of node.branches" class="branch">
+      <a href="javascript:void(0)" (click)="editSubExpense(branch)">{{ branch.data }}</a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for adding sub-expense -->
+<app-sub-expense
+  *ngIf="showModal"
+  [textInput]="modalTextInput"
+  [numberInput]="modalNumberInput"
+  (closeModal)="onCloseModal()"
+  (addSubExpense)="onAddSubExpense($event)">
+</app-sub-expense>

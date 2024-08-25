@@ -1,0 +1,50 @@
+<div class="sidebar" [ngClass]="{'closed': sidebarClosed}">
+  <div class="toggle-container">
+    <mat-icon class="toggle-icon" (click)="toggleSidebar()">menu</mat-icon>
+    <span class="toggle-text" *ngIf="!sidebarClosed">Kuberan</span>
+  </div>
+  <ul>
+    <li class="profile-info">
+      <a routerLink="/main/profile-info">
+        <mat-icon>account_circle</mat-icon>
+        <span *ngIf="!sidebarClosed">Profile Info</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/main/dashboard">
+        <mat-icon>dashboard</mat-icon>
+        <span *ngIf="!sidebarClosed">Dashboard</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/main/planner">
+        <mat-icon>assignment</mat-icon>
+        <span *ngIf="!sidebarClosed">Planner</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/main/calendar">
+        <mat-icon>calendar_today</mat-icon>
+        <span *ngIf="!sidebarClosed">Calendar</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/main/report">
+        <mat-icon>report</mat-icon>
+        <span *ngIf="!sidebarClosed">Report</span>
+      </a>
+    </li>
+    <li>
+      <div class="logout-container" [ngClass]="{'closed': sidebarClosed}">
+        <button (click)="confirmLogout()" class="logout-btn">
+          <mat-icon>exit_to_app</mat-icon>
+          <span class="logout-text">Logout</span>
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>

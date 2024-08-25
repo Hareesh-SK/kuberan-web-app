@@ -1,0 +1,37 @@
+.add-sub-expense {
+  cursor: pointer;
+  color: #007bff; /* Example color */
+  font-size: 20px; /* Example font size */
+  margin-left: 10px; /* Example margin */
+}
+
+.add-sub-expense:hover {
+  color: #0056b3; /* Example color on hover */
+}
+
+.flow-chart {
+  margin: 20px;
+}
+
+.node {
+  margin: 10px 0;
+  position: relative; /* Position for icons */
+}
+
+.icons {
+  margin-left: 10px; /* Add space between text and icons */
+}
+
+.branch {
+  margin-left: 20px;
+  cursor: pointer; /* Indicate clickable links */
+}
+
+.branch:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+
+.top-bar {
+  text-align: right;
+  padding: 10px;
+}
