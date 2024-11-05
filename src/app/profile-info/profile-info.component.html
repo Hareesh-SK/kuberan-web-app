@@ -1,88 +1,80 @@
-<br>
-<div class="container">
-  <div class="row button-group">
-    <button mat-raised-button color="primary" (click)="toggleEdit()" class="edit-button">
-      {{ isEdit ? 'Cancel' : 'Edit' }}
-    </button>
-    <button mat-raised-button class="save-button" (click)="saveProfile()" *ngIf="isEdit">
-      Save
-    </button>
-  </div>
-  
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">First Name: {{ user.first_name }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.first_name" placeholder="First Name" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">Last Name: {{ user.last_name }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.last_name" placeholder="Last Name" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">Age: {{ user.age }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.age" type="number" placeholder="Age" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">Phone Number: {{ user.phone_number }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.phone_number" placeholder="Phone Number" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">Email: {{ user.email_id }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.email_id" type="email" placeholder="Email" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">City: {{ user.city }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.city" placeholder="City" />
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row form-group" *ngIf="!isEdit">
-    <div class="col-12">Profession: {{ user.profession }}</div>
-  </div>
-  <div class="row form-group" *ngIf="isEdit">
-    <div class="col-12">
-      <mat-form-field class="full-width">
-        <input matInput [(ngModel)]="user.profession" placeholder="Profession" />
-      </mat-form-field>
-    </div>
-  </div>
+<div *ngIf="noChangesMessage" class="floating-message">
+  {{ noChangesMessage }}
 </div>
+
+
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+  <div class="container">
+    <div class="row button-group">
+      <button mat-raised-button color="primary" (click)="toggleEdit()" class="edit-button" type="button">
+        {{ isEdit ? 'Cancel' : 'Edit' }}
+      </button>
+      <button mat-raised-button *ngIf="isEdit" type="submit">
+        Save
+      </button>
+    </div>
+    
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">First Name: {{ user.first_name }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="first_name" placeholder="First Name" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">Last Name: {{ user.last_name }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="last_name" placeholder="Last Name" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">Age: {{ user.age }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="age" type="number" placeholder="Age" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">Phone Number: {{ user.phone_number }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="phone_number" placeholder="Phone Number" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">Email: {{ user.email_id }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="email_id" type="email" placeholder="Email" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">City: {{ user.city }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="city" placeholder="City" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row form-group">
+      <div class="col-12" *ngIf="!isEdit">Profession: {{ user.profession }}</div>
+      <div class="col-12" *ngIf="isEdit">
+        <mat-form-field class="full-width">
+          <input matInput formControlName="profession" placeholder="Profession" />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</form>

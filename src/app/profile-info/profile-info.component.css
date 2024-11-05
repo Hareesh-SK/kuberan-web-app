@@ -1,34 +1,62 @@
+/* Container for buttons */
+
+.container {
+  width: 600px;
+}
 .button-group {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between; /* Space buttons evenly */
+  margin-top: 15px;
   margin-bottom: 20px;
   margin-left: 15px; /* Adjust margin for left spacing */
 }
 
+.floating-message {
+  position: fixed;
+  top: 20px; /* Distance from the top of the screen */
+  left: 30%;
+  transform: translateX(-50%); /* Center the message horizontally */
+  background-color: #ffcc00;
+  color: #333;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  z-index: 1000; /* Ensure the message is on top */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Container for form fields */
 .form-group {
   margin-bottom: 20px;
-  margin-left: 2px; 
+  margin-left: 10px; /* Adjusted margin for better alignment */
 }
 
+/* Make form fields take up full width */
 .full-width {
   width: 100%;
+  padding: 5px; /* Optional padding for better spacing */
 }
 
+/* Remove focus outline and shadow on buttons */
 button:focus {
   outline: none; /* Remove outline when button is focused */
   box-shadow: none; /* Remove box-shadow when button is focused */
 }
 
+/* Styling for the Edit button */
 .edit-button {
   margin-right: 5px; /* Reduced margin */
   background-color: white;
   color: black;
-  border: 1px solid #ccc;
+  border: 0.5px solid #512e90;
 }
 
-.save-button {
-  background-color: green;
-  color: white;
+/* Add hover effect for Edit button */
+.edit-button:hover {
+  background-color: #512e90; /* Subtle change on hover */
 }
-
-
+.full-width {
+  width: 105%; /* Set width to 60% */
+  padding: 5px; /* Optional padding for better spacing */
+}
