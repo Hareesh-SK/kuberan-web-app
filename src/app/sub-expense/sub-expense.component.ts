@@ -6,21 +6,29 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./sub-expense.component.css']
 })
 export class SubExpenseComponent {
-  @Input() textInput: string = ''; // Updated to use input bindings
-  @Input() numberInput: number | null = null; // Updated to use input bindings
-  @Output() closeModal = new EventEmitter<void>();
-  @Output() addSubExpense = new EventEmitter<{ text: string, number: number }>();
 
-  // Method to emit the sub-expense data to the parent component
+  errorMessage: string = '';
+  @Input() textInput: string = '';
+  @Input() numberInput: number | null = null;
+  @Input() dateInput: Date | null = null; // Accept date input
+  @Output() closeModal = new EventEmitter<void>();
+  @Output() addSubExpense = new EventEmitter<{ text: string, number: number, date: Date | null }>(); // Include date
+
+  selectedDate: Date | null = null; // New property for the selected date
+
+  ngOnInit() {
+    this.selectedDate = this.dateInput; // Initialize with dateInput if available
+  }
+
   onAddSubExpense() {
     if (this.textInput.trim() !== '' && this.numberInput !== null) {
-      this.addSubExpense.emit({ text: this.textInput, number: this.numberInput });
+      this.addSubExpense.emit({ text: this.textInput, number: this.numberInput, date: this.selectedDate }); // Emit date
       this.textInput = '';
       this.numberInput = null;
+      this.selectedDate = null; // Reset date
     }
   }
 
-  // Method to emit close event to the parent component
   onClose() {
     this.closeModal.emit();
   }

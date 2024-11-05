@@ -5,7 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon'; // Import MatIconModule for icons
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 import { PlannerComponent } from './planner.component';
 import { SubExpenseComponent } from '../sub-expense/sub-expense.component';
 
@@ -25,7 +28,12 @@ const routes: Routes = [
     MatButtonModule,
     MatInputModule,
     MatDialogModule,
-    MatIconModule // Add MatIconModule to imports
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [
+    MatDatepickerModule
   ]
 })
 export class PlannerModule { }

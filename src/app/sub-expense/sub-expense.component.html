@@ -1,13 +1,19 @@
 <mat-dialog-content class="modal">
   <div class="modal-content">
-    <h2>Add Sub-Expense</h2>
+    <h2>Add/Edit Sub-Expense</h2>
     <mat-form-field appearance="fill">
-      <mat-label>Text</mat-label>
+      <mat-label>Name</mat-label>
       <input matInput [(ngModel)]="textInput">
     </mat-form-field>
     <mat-form-field appearance="fill">
-      <mat-label>Number</mat-label>
+      <mat-label>Amount</mat-label>
       <input matInput type="number" [(ngModel)]="numberInput">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="Choose a date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     <div class="actions">
       <button mat-button (click)="onClose()">Cancel</button>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-planner',
@@ -6,92 +7,130 @@ import { Component } from '@angular/core';
   styleUrls: ['./planner.component.css']
 })
 export class PlannerComponent {
-  inputData: string = ''; // Variable to store input data
-  dataTree: any[] = []; // Array to store data points and their branches
-  showModal: boolean = false; // Control visibility of the modal
-  currentParentNode: any = null; // To store the current parent node
-  editingNode: any = null; // To store the node being edited
-  editedData: string = ''; // To store edited data temporarily
-  modalTextInput: string = ''; // Text input for the modal
-  modalNumberInput: number | null = null; // Number input for the modal
+  inputData: string = '';
+  monthlyIncome: number | null = null;
+  dataTree: any[] = [];
+  showModal: boolean = false;
+  currentParentNode: any = null;
+  editingNode: any = null;
+  editedData: string = '';
+  modalTextInput: string = '';
+  modalNumberInput: number | null = null;
 
-  // Method to add a new main expense
+  modalDateInput: Date | null = null; // Ensure this is a Date type or null
+
+
   addMainExpense() {
     if (this.inputData.trim() !== '') {
       this.dataTree.push({
         data: this.inputData,
-        branches: [] // Initialize an empty array for branches
+        main_expense_amount: 0,
+        branches: []
       });
-      this.inputData = ''; // Clear the input field after adding data
+      this.inputData = '';
     }
   }
 
-  // Method to show the modal and set the current parent node for adding sub-expenses
-  addSubExpense(parentNode: any) {
-    this.currentParentNode = parentNode;
-    this.showModal = true;
-    this.modalTextInput = ''; // Clear modal input fields
-    this.modalNumberInput = null;
+  addSubExpense(node: any) {
+    this.currentParentNode = node; // Capture the parent node
+    this.modalTextInput = ''; // Reset text input
+    this.modalNumberInput = null; // Reset number input
+    this.modalDateInput = null; // Reset date input
+    this.showModal = true; // Show the modal
   }
 
-  // Method to handle adding a sub-expense from the modal
-  onAddSubExpense(subExpenseData: { text: string, number: number }) {
-    if (this.currentParentNode) {
-      if (this.editingNode) {
-        this.editingNode.data = `${subExpenseData.text} (${subExpenseData.number})`;
-        this.editingNode = null;
-      } else {
-        this.currentParentNode.branches.push({
-          data: `${subExpenseData.text} (${subExpenseData.number})`,
-          branches: [] // Initialize an empty array for branches of the new sub-expense
-        });
-      }
+  onAddSubExpense(subExpenseData: { text: string; number: number; date: Date | null }) {
+    if (this.editingNode) {
+      this.editingNode.data = `${subExpenseData.text} (${subExpenseData.number})`;
+      this.editingNode.date = subExpenseData.date; // Use Date type directly
+      this.editingNode = null;
+    } else {
+      this.currentParentNode.branches.push({
+        data: `${subExpenseData.text} (${subExpenseData.number})`,
+        date: subExpenseData.date, // Ensure this is Date type
+        branches: []
+      });
     }
-    this.showModal = false; // Hide the modal after adding sub-expense
+    this.currentParentNode.main_expense_amount = this.calculateSubExpenseTotal(this.currentParentNode);
+    this.showModal = false;
   }
 
-  // Method to close the modal
   onCloseModal() {
     this.showModal = false;
     this.editingNode = null;
   }
 
-  // Method to edit a main expense
   editMainExpense(node: any) {
     this.editingNode = node;
     this.editedData = node.data;
   }
 
-  // Method to save edited expense
   saveEditedExpense(node: any) {
     node.data = this.editedData;
+    node.main_expense_amount = this.editedData;
     this.editingNode = null;
     this.editedData = '';
   }
 
-  // Method to cancel edit mode
   cancelEdit() {
     this.editingNode = null;
     this.editedData = '';
   }
 
-  // Method to remove a main expense
   removeMainExpense(index: number) {
     this.dataTree.splice(index, 1);
   }
 
-  // Method to edit a sub-expense
   editSubExpense(branch: any) {
     this.modalTextInput = branch.data.split(' (')[0];
     this.modalNumberInput = parseInt(branch.data.split(' (')[1]);
-    this.currentParentNode = null; // Ensure we're not adding a new sub-expense
+    this.modalDateInput = branch.date || null; // Populate date input with existing date
+    this.currentParentNode = null;
     this.editingNode = branch;
     this.showModal = true;
   }
 
-  // Method to save data (logic will come later)
+  removeSubExpense(parentNode: any, branch: any) {
+    const index = parentNode.branches.indexOf(branch);
+    if (index >= 0) {
+      parentNode.branches.splice(index, 1);
+    }
+    parentNode.main_expense_amount = this.calculateSubExpenseTotal(parentNode);
+  }
+
+  calculateSubExpenseTotal(node: any): number {
+    return node.branches.reduce((total: number, branch: any) => {
+      const amount = parseInt(branch.data.split('(')[1]);
+      return total + (isNaN(amount) ? 0 : amount);
+    }, 0);
+  }
+
+  calculateRemainingIncome(): number {
+    const totalExpenses = this.dataTree.reduce((sum, node) => sum + node.main_expense_amount, 0);
+    return this.monthlyIncome ? this.monthlyIncome - totalExpenses : 0;
+  }
+
   saveData() {
-    // Logic to save data
-    console.log('Data saved:', this.dataTree);
+    let plannerData = cloneDeep(this.dataTree);
+    plannerData.forEach(node => {
+      node.main_expense = node.data;
+      node.sub_expenses = node.branches;
+      delete node.data;
+      delete node.branches;
+  
+      node.sub_expenses.forEach(branch => {
+        if (branch.data) {
+          const [sub_expense, sub_expense_amount] = branch.data.match(/(.*) \((\d+)\)/).slice(1, 3);
+          branch.sub_expense = sub_expense;
+          branch.sub_expense_amount = parseInt(sub_expense_amount);
+          branch.sub_expense_date = branch.date || null; // Ensure date is saved
+          delete branch.data;
+          delete branch.branches;
+          delete branch.date;
+        }
+      });
+    });
+  
+    console.log(plannerData); // For debugging, to see saved planner data with date
   }
 }

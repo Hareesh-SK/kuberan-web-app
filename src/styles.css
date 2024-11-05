@@ -1,4 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { 
+    height: 100%; 
+}
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+/* Z-index adjustments */
+.mat-datepicker-content, 
+.cdk-overlay-container {
+    z-index: 2000 !important; /* Ensure it's on top of all other overlays */
+}
+
+.mat-datepicker-popup {
+    z-index: 2001 !important; /* Make sure it's higher than any other modal */
+}
+
+.mat-dialog-container {
+    z-index: 1000 !important; /* Ensure the modal has a lower z-index */
+}
+
+.custom-dialog-backdrop {
+    z-index: 999 !important; /* Adjust as needed */
+}
+
+.custom-dialog-panel {
+    z-index: 1000 !important; /* Ensure it has a lower z-index than the date picker */
+}
