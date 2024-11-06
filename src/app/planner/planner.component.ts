@@ -16,9 +16,7 @@ export class PlannerComponent {
   editedData: string = '';
   modalTextInput: string = '';
   modalNumberInput: number | null = null;
-
-  modalDateInput: Date | null = null; // Ensure this is a Date type or null
-
+  modalDateInput: Date | null = null;
 
   addMainExpense() {
     if (this.inputData.trim() !== '') {
@@ -32,26 +30,35 @@ export class PlannerComponent {
   }
 
   addSubExpense(node: any) {
-    this.currentParentNode = node; // Capture the parent node
-    this.modalTextInput = ''; // Reset text input
-    this.modalNumberInput = null; // Reset number input
-    this.modalDateInput = null; // Reset date input
-    this.showModal = true; // Show the modal
+    this.currentParentNode = node;
+    this.editingNode = null; // Reset edit mode
+    this.modalTextInput = '';
+    this.modalNumberInput = null;
+    this.modalDateInput = null;
+    this.showModal = true;
   }
 
   onAddSubExpense(subExpenseData: { text: string; number: number; date: Date | null }) {
     if (this.editingNode) {
+      // Editing an existing sub-expense
       this.editingNode.data = `${subExpenseData.text} (${subExpenseData.number})`;
-      this.editingNode.date = subExpenseData.date; // Use Date type directly
+      this.editingNode.date = subExpenseData.date;
       this.editingNode = null;
-    } else {
+    } else if (this.currentParentNode) {
+      // Adding a new sub-expense
       this.currentParentNode.branches.push({
         data: `${subExpenseData.text} (${subExpenseData.number})`,
-        date: subExpenseData.date, // Ensure this is Date type
+        date: subExpenseData.date,
         branches: []
       });
     }
-    this.currentParentNode.main_expense_amount = this.calculateSubExpenseTotal(this.currentParentNode);
+
+    // Update main expense total and remaining income
+    if (this.currentParentNode) {
+      this.currentParentNode.main_expense_amount = this.calculateSubExpenseTotal(this.currentParentNode);
+    }
+    this.calculateRemainingIncome();
+    
     this.showModal = false;
   }
 
@@ -79,14 +86,15 @@ export class PlannerComponent {
 
   removeMainExpense(index: number) {
     this.dataTree.splice(index, 1);
+    this.calculateRemainingIncome(); // Update after removal
   }
 
   editSubExpense(branch: any) {
     this.modalTextInput = branch.data.split(' (')[0];
     this.modalNumberInput = parseInt(branch.data.split(' (')[1]);
-    this.modalDateInput = branch.date || null; // Populate date input with existing date
-    this.currentParentNode = null;
-    this.editingNode = branch;
+    this.modalDateInput = branch.date || null;
+    this.currentParentNode = null; // Avoid affecting add mode
+    this.editingNode = branch; // Set the editing node to current branch
     this.showModal = true;
   }
 
@@ -96,9 +104,11 @@ export class PlannerComponent {
       parentNode.branches.splice(index, 1);
     }
     parentNode.main_expense_amount = this.calculateSubExpenseTotal(parentNode);
+    this.calculateRemainingIncome(); // Update remaining income after removal
   }
 
   calculateSubExpenseTotal(node: any): number {
+    if (!node) return 0;
     return node.branches.reduce((total: number, branch: any) => {
       const amount = parseInt(branch.data.split('(')[1]);
       return total + (isNaN(amount) ? 0 : amount);
@@ -117,20 +127,20 @@ export class PlannerComponent {
       node.sub_expenses = node.branches;
       delete node.data;
       delete node.branches;
-  
+
       node.sub_expenses.forEach(branch => {
         if (branch.data) {
           const [sub_expense, sub_expense_amount] = branch.data.match(/(.*) \((\d+)\)/).slice(1, 3);
           branch.sub_expense = sub_expense;
           branch.sub_expense_amount = parseInt(sub_expense_amount);
-          branch.sub_expense_date = branch.date || null; // Ensure date is saved
+          branch.sub_expense_date = branch.date || null;
           delete branch.data;
           delete branch.branches;
           delete branch.date;
         }
       });
     });
-  
-    console.log(plannerData); // For debugging, to see saved planner data with date
+
+    console.log(plannerData);
   }
 }

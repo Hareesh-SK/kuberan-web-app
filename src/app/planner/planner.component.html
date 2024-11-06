@@ -1,4 +1,13 @@
 <div class="flow-chart">
+  <!-- Monthly Income Input -->
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter Monthly Income</mat-label>
+      <input matInput [(ngModel)]="monthlyIncome" type="number" placeholder="Monthly Income">
+    </mat-form-field>
+  </div>
+  <p>Total Remaining Income: {{ calculateRemainingIncome() | currency }}</p>
+
   <div class="top-right">
     <button mat-raised-button color="primary" (click)="saveData()">Save</button>
   </div>
@@ -11,6 +20,7 @@
     &nbsp;
     <button mat-raised-button [disabled]="!inputData" color="primary" (click)="addMainExpense()">Add</button>
   </div>
+  
   <div *ngFor="let node of dataTree; let i = index" class="node">
     <div>
       {{ node.data }} = {{ calculateSubExpenseTotal(node) }}
