@@ -6,8 +6,12 @@
       <input matInput [(ngModel)]="monthlyIncome" type="number" placeholder="Monthly Income">
     </mat-form-field>
   </div>
-  <p>Total Remaining Income: {{ calculateRemainingIncome() | currency }}</p>
-
+  <p>
+    Total Remaining Income: 
+    <span [ngStyle]="{'color': calculateRemainingIncome() < 0 ? 'red' : 'black'}">
+      {{ calculateRemainingIncome() | currency : "INR" }}
+    </span>
+  </p>
   <div class="top-right">
     <button mat-raised-button color="primary" (click)="saveData()">Save</button>
   </div>
@@ -22,7 +26,14 @@
   </div>
   
   <div *ngFor="let node of dataTree; let i = index" class="node">
-    <div>
+    <div *ngIf="editingNode === node; else viewMode">
+      <mat-form-field appearance="fill">
+        <input matInput [(ngModel)]="editedData" placeholder="Edit Main Expense">
+      </mat-form-field>
+      <button mat-button color="primary" (click)="saveEditedExpense(node)">Save</button>
+      <button mat-button (click)="cancelEdit()">Cancel</button>
+    </div>
+    <ng-template #viewMode>
       {{ node.data }} = {{ calculateSubExpenseTotal(node) }}
       <span class="icons">
         <button mat-icon-button color="primary" (click)="editMainExpense(node)">
@@ -35,7 +46,7 @@
           <i class="fa fa-plus-circle"></i>
         </span>
       </span>
-    </div>
+    </ng-template>
     <div *ngFor="let branch of node.branches" class="branch">
       <a href="javascript:void(0)" (click)="editSubExpense(branch)">
         {{ branch.data }} <span *ngIf="branch.date"> - {{ branch.date | date:'mediumDate' }}</span>

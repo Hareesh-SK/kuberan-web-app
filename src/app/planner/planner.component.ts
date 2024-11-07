@@ -40,9 +40,20 @@ export class PlannerComponent {
 
   onAddSubExpense(subExpenseData: { text: string; number: number; date: Date | null }) {
     if (this.editingNode) {
-      // Editing an existing sub-expense
-      this.editingNode.data = `${subExpenseData.text} (${subExpenseData.number})`;
-      this.editingNode.date = subExpenseData.date;
+      // Find the parent node in dataTree and update the specific branch entry
+      const parentNode = this.dataTree.find(node =>
+        node.branches.includes(this.editingNode)
+      );
+  
+      if (parentNode) {
+        // Update the branch data and date
+        this.editingNode.data = `${subExpenseData.text} (${subExpenseData.number})`;
+        this.editingNode.date = subExpenseData.date;
+  
+        // Update main expense total for the parent node
+        parentNode.main_expense_amount = this.calculateSubExpenseTotal(parentNode);
+      }
+  
       this.editingNode = null;
     } else if (this.currentParentNode) {
       // Adding a new sub-expense
@@ -51,15 +62,19 @@ export class PlannerComponent {
         date: subExpenseData.date,
         branches: []
       });
-    }
-
-    // Update main expense total and remaining income
-    if (this.currentParentNode) {
+  
+      // Update main expense total for the current parent node
       this.currentParentNode.main_expense_amount = this.calculateSubExpenseTotal(this.currentParentNode);
     }
+  
+    // Update the Total Remaining Income after the edit
     this.calculateRemainingIncome();
-    
     this.showModal = false;
+  }
+
+  calculateRemainingIncome(): number {
+    const totalExpenses = this.dataTree.reduce((sum, node) => sum + node.main_expense_amount, 0);
+    return this.monthlyIncome ? this.monthlyIncome - totalExpenses : 0;
   }
 
   onCloseModal() {
@@ -73,10 +88,9 @@ export class PlannerComponent {
   }
 
   saveEditedExpense(node: any) {
-    node.data = this.editedData;
-    node.main_expense_amount = this.editedData;
-    this.editingNode = null;
-    this.editedData = '';
+    node.data = this.editedData; // Save only the edited main expense name
+    this.editingNode = null;      // Clear editing node state
+    this.editedData = '';         // Clear temporary edited data
   }
 
   cancelEdit() {
@@ -113,11 +127,6 @@ export class PlannerComponent {
       const amount = parseInt(branch.data.split('(')[1]);
       return total + (isNaN(amount) ? 0 : amount);
     }, 0);
-  }
-
-  calculateRemainingIncome(): number {
-    const totalExpenses = this.dataTree.reduce((sum, node) => sum + node.main_expense_amount, 0);
-    return this.monthlyIncome ? this.monthlyIncome - totalExpenses : 0;
   }
 
   saveData() {
