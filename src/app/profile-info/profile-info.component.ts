@@ -17,7 +17,18 @@ export class ProfileInfoComponent implements OnInit {
   userId: string; 
   loggedInUser: number;
 
-  constructor(private apiService: ApiService, private fb: FormBuilder) {}
+  constructor(private apiService: ApiService, private fb: FormBuilder) {
+    // Initialize the form with default values
+    this.profileForm = this.fb.group({
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
+      age: [null, [Validators.required, Validators.min(1)]],
+      phone_number: ['', [Validators.required, Validators.pattern('^[0-9]+$')]],
+      email_id: ['', [Validators.required, Validators.email]],
+      city: ['', Validators.required],
+      profession: ['', Validators.required]
+    });
+  }
 
   async ngOnInit() {
     this.userId = localStorage.getItem('loggedInUser');
@@ -27,19 +38,19 @@ export class ProfileInfoComponent implements OnInit {
     if (userData) {
       this.user = userData.userData || {}; 
       this.clonedUser = cloneDeepWith(this.user);
-      this.initializeForm();
+      this.populateForm(); // Populate the form with user data
     }
   }
 
-  initializeForm() {
-    this.profileForm = this.fb.group({
-      first_name: [this.user.first_name, Validators.required],
-      last_name: [this.user.last_name, Validators.required],
-      age: [this.user.age, [Validators.required, Validators.min(1)]],
-      phone_number: [this.user.phone_number, [Validators.required, Validators.pattern('^[0-9]+$')]],
-      email_id: [this.user.email_id, [Validators.required, Validators.email]],
-      city: [this.user.city, Validators.required],
-      profession: [this.user.profession, Validators.required]
+  populateForm() {
+    this.profileForm.patchValue({
+      first_name: this.user.first_name,
+      last_name: this.user.last_name,
+      age: this.user.age,
+      phone_number: this.user.phone_number,
+      email_id: this.user.email_id,
+      city: this.user.city,
+      profession: this.user.profession
     });
   }
 
@@ -51,7 +62,7 @@ export class ProfileInfoComponent implements OnInit {
     }
   }
 
-  async onSubmit(): Promise<void>{
+  async onSubmit(): Promise<void> {
     if (this.profileForm.valid) {
       let hasChanges = false;
       const diff: any = { userId: this.loggedInUser };

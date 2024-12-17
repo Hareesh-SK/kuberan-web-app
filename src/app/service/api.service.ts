@@ -11,6 +11,8 @@ export class ApiService {
   private SAVE_USER_API = 'http://localhost:3000/api/saveUser'; 
   private GET_PROFILE_API = 'http://localhost:3000/api/user'; 
   private UPDATE_PROFILE_API = 'http://localhost:3000/api/updateUser'; 
+  private SAVE_MONTH_PLAN_API = 'http://localhost:3000/api/saveMonthPlan'; 
+
 
   constructor(private httpClient: HttpClient) {}
 
@@ -25,6 +27,12 @@ export class ApiService {
     const saveSub = this.httpClient.post(this.SAVE_USER_API, userData);
     const saveResp = await firstValueFrom(saveSub);
     return saveResp;
+  }
+
+  async saveMonthPlan(userId: any, plannerData: any) { 
+    const planSub = this.httpClient.post(`${this.SAVE_MONTH_PLAN_API}/${userId}`,plannerData);
+    const planResp = await firstValueFrom(planSub);
+    return planResp;
   }
 
   async getProfile(userId: number) { 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { cloneDeep } from 'lodash';
-
+import { ApiService } from '../service/api.service';
 @Component({
   selector: 'app-planner',
   templateUrl: './planner.component.html',
@@ -17,6 +17,11 @@ export class PlannerComponent {
   modalTextInput: string = '';
   modalNumberInput: number | null = null;
   modalDateInput: Date | null = null;
+  userId: string; 
+
+  constructor(private apiService: ApiService) {
+    this.userId = localStorage.getItem('loggedInUser');
+  }
 
   addMainExpense() {
     if (this.inputData.trim() !== '') {
@@ -129,27 +134,38 @@ export class PlannerComponent {
     }, 0);
   }
 
-  saveData() {
+  public async saveData() {
     let plannerData = cloneDeep(this.dataTree);
     plannerData.forEach(node => {
       node.main_expense = node.data;
       node.sub_expenses = node.branches;
       delete node.data;
       delete node.branches;
-
+  
       node.sub_expenses.forEach(branch => {
-        if (branch.data) {
-          const [sub_expense, sub_expense_amount] = branch.data.match(/(.*) \((\d+)\)/).slice(1, 3);
-          branch.sub_expense = sub_expense;
-          branch.sub_expense_amount = parseInt(sub_expense_amount);
-          branch.sub_expense_date = branch.date || null;
-          delete branch.data;
-          delete branch.branches;
-          delete branch.date;
-        }
+          if (branch.data) {
+              // Split data to get sub_expense and sub_expense_amount
+              const [sub_expense, sub_expense_amount] = branch.data.match(/(.*) \((\d+)\)/).slice(1, 3);
+              branch.sub_expense = sub_expense;
+              branch.sub_expense_amount = parseInt(sub_expense_amount);
+  
+              // Add month and year from sub_expense_date, then delete sub_expense_date
+              if (branch.date) {
+                  const date = new Date(branch.date);
+                  branch.full_date = date;
+                  branch.date = date.getDate();
+                  branch.month = date.getMonth() + 1; // Adding 1 as getMonth() is zero-based
+                  branch.year = date.getFullYear();
+              }else{
+                delete branch.date;
+              }
+              delete branch.data;
+              delete branch.branches;
+          }
       });
-    });
-
-    console.log(plannerData);
+  });
+  if(plannerData && plannerData.length > 0){
+    await this.apiService.saveMonthPlan(this.userId, plannerData);
+  }
   }
 }

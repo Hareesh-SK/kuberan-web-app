@@ -1,1 +1,15 @@
-<p>dashboard works!</p>
+<mat-card style="position: absolute; right:-340px; top:40px;" [style.height]="'300px'" [style.width]="'300px'">
+
+    <mat-card-header>
+      <mat-card-title style="font-family: serif font; font-style: Plathorn Extended;">Todays Expense</mat-card-title>
+    </mat-card-header>
+    <br>
+    <mat-card-content>
+      <div >
+        <p style="font-family: Helvetica; font-weight: bold;">{{ currentDate | date:'fullDate' }}</p>
+      </div>
+      <div>
+        <p style="width: 100%; height: auto;"> No Expense are Found</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
