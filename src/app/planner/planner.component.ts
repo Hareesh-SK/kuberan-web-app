@@ -18,9 +18,27 @@ export class PlannerComponent {
   modalNumberInput: number | null = null;
   modalDateInput: Date | null = null;
   userId: string; 
+  years: number[] = [];
+  selectedYear: number;
+  months: string[] = [
+    'January', 'February', 'March', 'April', 'May', 'June', 
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  selectedMonth: string;
 
   constructor(private apiService: ApiService) {
     this.userId = localStorage.getItem('loggedInUser');
+  }
+
+  ngOnInit(): void {
+    const currentYear = new Date().getFullYear();
+    // Populate years array from the current year to 10 years ahead
+    for (let i = currentYear; i < currentYear + 20; i++) {
+      this.years.push(i);
+    }
+    // Default selected year to current year
+    this.selectedYear = currentYear;
+    this.selectedMonth = this.months[new Date().getMonth()];
   }
 
   addMainExpense() {
@@ -139,6 +157,8 @@ export class PlannerComponent {
     plannerData.forEach(node => {
       node.main_expense = node.data;
       node.sub_expenses = node.branches;
+      node.month = this.selectedMonth; 
+      node.year = this.selectedYear;
       delete node.data;
       delete node.branches;
   

@@ -12,6 +12,7 @@ export class ApiService {
   private GET_PROFILE_API = 'http://localhost:3000/api/user'; 
   private UPDATE_PROFILE_API = 'http://localhost:3000/api/updateUser'; 
   private SAVE_MONTH_PLAN_API = 'http://localhost:3000/api/saveMonthPlan'; 
+  private GET_REPORT_API = 'http://localhost:3000/api/getReport'; 
 
 
   constructor(private httpClient: HttpClient) {}
@@ -45,5 +46,11 @@ export class ApiService {
     const updateSub = this.httpClient.post(this.UPDATE_PROFILE_API, userData);
     const updateResp = await firstValueFrom(updateSub);
     return updateResp;
+  }
+
+  public async getReport(userId: number,searchData:any){
+    const reportSub = this.httpClient.post(`${this.GET_REPORT_API}/${userId}`,searchData);
+    const reportResp = await firstValueFrom(reportSub);
+    return reportResp;
   }
 }

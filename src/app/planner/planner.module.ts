@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 
 import { PlannerComponent } from './planner.component';
 import { SubExpenseComponent } from '../sub-expense/sub-expense.component';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
   { path: '', component: PlannerComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
     MatButtonModule,
     MatInputModule,
     MatDialogModule,
+    MatSelectModule,
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule

@@ -16,6 +16,25 @@
     <button mat-raised-button color="primary" (click)="saveData()">Save</button>
   </div>
   <br>
+  <div class="picker-container">
+    <mat-form-field appearance="fill">
+      <mat-label>Pick a Month</mat-label>
+      <mat-select [(value)]="selectedMonth">
+        <mat-option *ngFor="let month of months" [value]="month">
+          {{ month }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field> &nbsp;
+    <mat-form-field appearance="fill">
+      <mat-label>Pick a Year</mat-label>
+      <mat-select [(value)]="selectedYear">
+        <mat-option *ngFor="let year of years" [value]="year">
+          {{ year }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br>
   <div>
     <mat-form-field appearance="fill">
       <mat-label>Enter main expense</mat-label>

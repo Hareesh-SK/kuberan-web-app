@@ -1,1 +1,58 @@
-<p>report works!</p>
+<br>
+<div class="picker-container">
+  &nbsp;  &nbsp;  &nbsp;
+  <mat-form-field appearance="fill">
+    <mat-label>Pick a Month</mat-label>
+    <mat-select [(value)]="selectedMonth">
+      <mat-option *ngFor="let month of months" [value]="month">
+        {{ month }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> &nbsp;
+  <mat-form-field appearance="fill">
+    <mat-label>Pick a Year</mat-label>
+    <mat-select [(value)]="selectedYear">
+      <mat-option *ngFor="let year of years" [value]="year">
+        {{ year }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  &nbsp; 
+  <button mat-raised-button color="primary" (click)="searchMonthReport()">
+    search
+  </button>
+</div>
+
+<div *ngIf="reportData?.length > 0 else noData">
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th *ngFor="let key of displayedColumns">{{ key | titlecase }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of reportData">
+          <td *ngFor="let key of displayedColumns">{{ row[key] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #noData>
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="let key of displayedColumns">{{ key | titlecase }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td [attr.colspan]="displayedColumns?.length" class="no-data">No Data for this Month</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>
+
+
+  

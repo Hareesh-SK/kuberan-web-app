@@ -14,7 +14,7 @@
 .floating-message {
   position: fixed;
   top: 20px; /* Distance from the top of the screen */
-  left: 30%;
+  left: 42%;
   transform: translateX(-50%); /* Center the message horizontally */
   background-color: #ffcc00;
   color: #333;
@@ -47,9 +47,9 @@ button:focus {
 /* Styling for the Edit button */
 .edit-button {
   margin-right: 5px; /* Reduced margin */
-  background-color: white;
+  background-color: #62439c;
   color: black;
-  border: 0.5px solid #512e90;
+  border: 0.5px solid #492887;
 }
 
 /* Add hover effect for Edit button */
