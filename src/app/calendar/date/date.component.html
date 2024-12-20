@@ -1,5 +1,13 @@
 <div class="date-container">
-  <button class="back-button" (click)="goBack()">Back to Calendar</button>
-  <h1>Selected Date</h1>
-  <p>{{ selectedDate }}</p>
+  <div class="header">
+    <h1>Selected Date</h1> <br>
+    <p>{{ selectedDate | date: 'fullDate' }}</p>
+  </div>
+  <div class="content">
+    <!-- Add your data content here -->
+    <p>Today Expense</p>
+  </div>
+  <div class="footer">
+    <button class="back-button" (click)="goBack()">Back to Calendar</button>
+  </div>
 </div>

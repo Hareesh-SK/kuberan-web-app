@@ -1,22 +1,36 @@
 .date-container {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 30vh;
+  position: relative;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+}
+
+.content {
+  flex-grow: 1;
+  text-align: center;
+  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  position: relative;
+}
+
+.footer {
+  text-align: left;
 }
 
 .back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
   background-color: #007bff;
   color: white;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
+  margin-top: 20px;
 }
 
 .back-button:hover {

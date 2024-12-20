@@ -28,3 +28,6 @@ body {
 .custom-dialog-panel {
     z-index: 1000 !important; /* Ensure it has a lower z-index than the date picker */
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

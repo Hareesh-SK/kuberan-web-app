@@ -1,6 +1,6 @@
 <br>
 <div class="picker-container">
-  &nbsp;  &nbsp;  &nbsp;
+  &nbsp; &nbsp; &nbsp;
   <mat-form-field appearance="fill">
     <mat-label>Pick a Month</mat-label>
     <mat-select [(value)]="selectedMonth">
@@ -8,7 +8,8 @@
         {{ month }}
       </mat-option>
     </mat-select>
-  </mat-form-field> &nbsp;
+  </mat-form-field>
+  &nbsp;
   <mat-form-field appearance="fill">
     <mat-label>Pick a Year</mat-label>
     <mat-select [(value)]="selectedYear">
@@ -17,33 +18,35 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  &nbsp; 
+  &nbsp;
   <button mat-raised-button color="primary" (click)="searchMonthReport()">
-    search
+    Search
   </button>
 </div>
 
-<div *ngIf="reportData?.length > 0 else noData">
+<div *ngIf="reportData?.length > 0; else noData">
   <div class="table-container">
+    <h2>{{ selectedMonth }} {{ selectedYear }}</h2>
     <table class="table">
       <thead>
         <tr>
-          <th *ngFor="let key of displayedColumns">{{ key | titlecase }}</th>
+          <th *ngFor="let column of displayedColumns">{{ column }}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of reportData">
-          <td *ngFor="let key of displayedColumns">{{ row[key] }}</td>
+          <td *ngFor="let key of orderedKeys">{{ row[key] }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
+
 <ng-template #noData>
   <table class="table">
     <thead>
       <tr>
-        <th *ngFor="let key of displayedColumns">{{ key | titlecase }}</th>
+        <th *ngFor="let column of displayedColumns">{{ column }}</th>
       </tr>
     </thead>
     <tbody>
@@ -53,6 +56,3 @@
     </tbody>
   </table>
 </ng-template>
-
-
-  

@@ -1,77 +1,86 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../service/api.service';
-import { groupBy } from "lodash";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
-  styleUrls: ['./report.component.css']
+  styleUrls: ['./report.component.css'],
 })
-export class ReportComponent implements OnInit{
+export class ReportComponent implements OnInit {
   userId: string;
   loggedInUser: number;
-  reportData: any;
-  displayedColumns: any;
-  monthTables: any;
+  reportData: any[] = [];
+  displayedColumns: string[] = [];
+  orderedKeys: string[] = [];
   years: number[] = [];
   selectedYear: number;
   months: string[] = [
-    'January', 'February', 'March', 'April', 'May', 'June', 
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
   selectedMonth: string;
 
+  constructor(private apiService: ApiService, private translate: TranslateService) {}
 
-  constructor(private apiService: ApiService) {}
-  public async ngOnInit(){
-
+  public async ngOnInit() {
     const currentYear = new Date().getFullYear();
-    // Populate years array from the current year to 10 years ahead
     for (let i = currentYear; i < currentYear + 20; i++) {
       this.years.push(i);
     }
-    // Default selected year to current year
     this.selectedYear = currentYear;
     this.selectedMonth = this.months[new Date().getMonth()];
-
     this.userId = localStorage.getItem('loggedInUser');
     this.loggedInUser = Number(this.userId);
-
-    const currentDate = new Date(); // Get the current date
-    const currentMonth = currentDate.getMonth() + 1; // Months are 0-based, so add 1
-    this.selectedMonth = this.months[currentMonth-1];
-    this.selectedYear = currentDate.getFullYear();
-
-    this.reportData = await this.apiService.getReport(this.loggedInUser,{month:this.selectedMonth,year:this.selectedYear});
-    this.reportData = this.processReportData(this.reportData );
-    this.displayedColumns = Object.keys(this.reportData[0]);
-  
+    await this.searchMonthReport();
   }
 
   public processReportData(reportData: any[]): any[] {
     return reportData.map((item) => {
       if (item.full_date) {
-        // Extract the day and the date from full_date and return formatted string
         const date = new Date(item.full_date);
-        const dayName = this.getDayName(item.full_date);
-        const formattedDate = `${date.getDate()}(${dayName})`; // Format as "24(Tuesday)"
-        return { ...item, full_date: formattedDate }; // Update full_date property
+        const dayName = this.getDayName(date);
+        item.full_date = `${date.getDate()} (${dayName})`;
+      } else {
+        item.full_date = 'No Date';
       }
-      return { ...item, full_date: "No Date" }; // Return the object unchanged if no full_date
+      delete item.main_expense_id;
+      delete item.month;
+      delete item.year;
+      delete item.sub_expense_id;
+      return item;
     });
   }
-  public getDayName(fullDate: string): string {
-    const date = new Date(fullDate); // Parse the full_date string
-    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    return days[date.getDay()]; // Get the day of the week
+
+  public getDayName(date: Date): string {
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[date.getDay()];
   }
 
-  public async searchMonthReport(){
+  public async searchMonthReport() {
+    const report:any = await this.apiService.getReport(this.loggedInUser, {
+      month: this.selectedMonth,
+      year: this.selectedYear,
+    });
 
-    this.reportData = await this.apiService.getReport(this.loggedInUser,{month:this.selectedMonth,year:this.selectedYear});
-    if(this.reportData.length > 0){
-      this.reportData = this.processReportData(this.reportData );
-      this.displayedColumns = Object.keys(this.reportData[0]);
+    if (report && report.length > 0) {
+      this.reportData = this.processReportData(report);
+      this.orderedKeys = [ 
+        'full_date',
+        'main_expense',
+        'main_expense_amount',
+        'sub_expense',
+        'sub_expense_amount',
+      ];
+      this.displayedColumns = [
+        'Date',
+        'Main Expense',
+        'Main Expense Amount',
+        'Sub Expense',
+        'Sub Expense Amount',
+      ];
+    } else {
+      this.reportData = [];
     }
   }
 }

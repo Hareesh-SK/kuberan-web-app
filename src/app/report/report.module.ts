@@ -4,11 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReportComponent } from './report.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
-
-const routes: Routes = [
-  { path: '', component: ReportComponent },
-];
+const routes: Routes = [{ path: '', component: ReportComponent }];
 
 @NgModule({
   declarations: [ReportComponent],
@@ -16,7 +14,8 @@ const routes: Routes = [
     CommonModule,
     MatSelectModule,
     MatButtonModule,
-    RouterModule.forChild(routes)
-  ]
+    TranslateModule,
+    RouterModule.forChild(routes),
+  ],
 })
-export class ReportModule { }
+export class ReportModule {}
