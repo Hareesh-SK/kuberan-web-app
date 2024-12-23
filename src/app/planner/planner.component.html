@@ -1,3 +1,9 @@
+
+<div *ngIf="savedSuccessMessage" 
+     class="floating-message" 
+     [ngClass]="{ 'success': errorColour, 'error': !errorColour }">
+  {{ savedSuccessMessage }}
+</div>
 <div class="flow-chart">
   <!-- Monthly Income Input -->
   <div>

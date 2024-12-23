@@ -1,4 +1,8 @@
 <mat-card class="calendar-card">
+  <h2>
+    {{selectedMonth}}
+    {{selectedYear}}
+  </h2>
   <div class="calendar-container">
     <mat-calendar (selectedChange)="onDateSelected($event)" class="custom-calendar"></mat-calendar>
   </div>

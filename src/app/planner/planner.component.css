@@ -35,3 +35,22 @@
   text-align: right;
   padding: 10px;
 }
+
+.floating-message {
+  font-size: 17px;
+  top: 20px; /* Distance from the top of the screen */
+  left: 22%;
+  padding: 10px 20px;
+  font-weight: bold;
+  z-index: 1000; /* Ensure the message is on top */
+  text-align: center;
+}
+
+.success {
+  color: #2a9e31; /* Green color for success */
+}
+
+.error {
+  color: #e63946; /* Red color for error */
+}
+

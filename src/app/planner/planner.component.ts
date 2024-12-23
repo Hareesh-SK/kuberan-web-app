@@ -20,6 +20,9 @@ export class PlannerComponent {
   userId: string; 
   years: number[] = [];
   selectedYear: number;
+  totalRemainingIncome: number;
+  savedSuccessMessage:string;
+  errorColour: boolean = false;
   months: string[] = [
     'January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -97,6 +100,7 @@ export class PlannerComponent {
 
   calculateRemainingIncome(): number {
     const totalExpenses = this.dataTree.reduce((sum, node) => sum + node.main_expense_amount, 0);
+    this.totalRemainingIncome = this.monthlyIncome - totalExpenses;
     return this.monthlyIncome ? this.monthlyIncome - totalExpenses : 0;
   }
 
@@ -159,6 +163,8 @@ export class PlannerComponent {
       node.sub_expenses = node.branches;
       node.month = this.selectedMonth; 
       node.year = this.selectedYear;
+      node.monthly_income = this.monthlyIncome;
+      node.total_remaining_income = this.totalRemainingIncome;
       delete node.data;
       delete node.branches;
   
@@ -186,7 +192,16 @@ export class PlannerComponent {
       });
   });
   if(plannerData && plannerData.length > 0){
-    await this.apiService.saveMonthPlan(this.userId, plannerData);
+    let saveSuccess:any = await this.apiService.saveMonthPlan(this.userId, plannerData);
+    if(saveSuccess){
+      this.savedSuccessMessage = saveSuccess.message;
+      if(saveSuccess.success){
+
+        this.errorColour = true
+      }
+    }
+  }else{
+    this.savedSuccessMessage = "No Planner data found";
   }
   }
 }
