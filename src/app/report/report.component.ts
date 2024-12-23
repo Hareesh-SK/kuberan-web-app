@@ -21,7 +21,7 @@ export class ReportComponent implements OnInit {
   ];
   selectedMonth: string;
 
-  constructor(private apiService: ApiService, private translate: TranslateService) {}
+  constructor(private apiService: ApiService) {}
 
   public async ngOnInit() {
     const currentYear = new Date().getFullYear();
@@ -36,10 +36,10 @@ export class ReportComponent implements OnInit {
   }
 
   public processReportData(reportData: any[]): any[] {
-    return reportData.map((item) => {
+    return reportData.map((item, index) => {
       if (item.full_date) {
         const date = new Date(item.full_date);
-        const dayName = this.getDayName(date);
+        const dayName = this.getDayName(item.full_date);
         item.full_date = `${date.getDate()} (${dayName})`;
       } else {
         item.full_date = 'No Date';
@@ -48,24 +48,37 @@ export class ReportComponent implements OnInit {
       delete item.month;
       delete item.year;
       delete item.sub_expense_id;
+
       return item;
     });
   }
 
-  public getDayName(date: Date): string {
+  public getDayName(dateString: string): string {
+    const date = new Date(dateString);
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return days[date.getDay()];
   }
 
+  public getBackgroundColor(mainExpense: string, index: number): string {
+    // Create a simple hash code from the mainExpense string to get a consistent hash
+    let hash = 0;
+    for (let i = 0; i < mainExpense.length; i++) {
+      hash = mainExpense.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash % 360);
+    const lightness = 93; // Light color
+    return `hsl(${hue}, 100%, ${lightness}%)`;
+  }
+
   public async searchMonthReport() {
-    const report:any = await this.apiService.getReport(this.loggedInUser, {
+    const report: any = await this.apiService.getReport(this.loggedInUser, {
       month: this.selectedMonth,
       year: this.selectedYear,
     });
 
     if (report && report.length > 0) {
       this.reportData = this.processReportData(report);
-      this.orderedKeys = [ 
+      this.orderedKeys = [
         'full_date',
         'main_expense',
         'main_expense_amount',

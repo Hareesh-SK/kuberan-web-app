@@ -9,7 +9,14 @@
         <p style="font-family: Helvetica; font-weight: bold;">{{ currentDate | date:'fullDate' }}</p>
       </div>
       <div>
-        <p style="width: 100%; height: auto;"> No Expense are Found</p>
+        <div *ngFor="let mainExpense of mainExpenseKeys">
+          <h3><strong><u>{{ mainExpense }}</u></strong></h3>
+          <div *ngFor="let sub of groupedExpenses[mainExpense]">
+            {{ sub.sub_expense }} - {{ sub.sub_expense_amount }}
+          </div>
+          <br>
+          <br>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

@@ -34,8 +34,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of reportData">
-          <td *ngFor="let key of orderedKeys">{{ row[key] }}</td>
+        <tr *ngFor="let row of reportData; let i = index">
+          <td
+            *ngFor="let key of orderedKeys"
+            [ngStyle]="{
+              'background-color': getBackgroundColor(row.main_expense, i)
+            }"
+          >
+            {{ row[key] }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -43,6 +50,8 @@
 </div>
 
 <ng-template #noData>
+  <div class="table-container">
+  <h2>{{ selectedMonth }} {{ selectedYear }}</h2>
   <table class="table">
     <thead>
       <tr>
@@ -55,4 +64,5 @@
       </tr>
     </tbody>
   </table>
+</div>
 </ng-template>

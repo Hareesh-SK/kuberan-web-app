@@ -14,6 +14,9 @@ export class ApiService {
   private SAVE_MONTH_PLAN_API = 'http://localhost:3000/api/saveMonthPlan'; 
   private GET_REPORT_API = 'http://localhost:3000/api/getReport'; 
 
+  private GET_CURRENT_DAY_DATA_API = 'http://localhost:3000/api/getCurrentDayData'; 
+
+
 
   constructor(private httpClient: HttpClient) {}
 
@@ -52,5 +55,10 @@ export class ApiService {
     const reportSub = this.httpClient.post(`${this.GET_REPORT_API}/${userId}`,searchData);
     const reportResp = await firstValueFrom(reportSub);
     return reportResp;
+  }
+  public async getCurrentDayData(userId: number) { 
+    const currentDataSub = this.httpClient.get(`${this.GET_CURRENT_DAY_DATA_API}/${userId}`);
+    const currentDataResp = await firstValueFrom(currentDataSub);
+    return currentDataResp;
   }
 }

@@ -172,7 +172,8 @@ export class PlannerComponent {
               // Add month and year from sub_expense_date, then delete sub_expense_date
               if (branch.date) {
                   const date = new Date(branch.date);
-                  branch.full_date = date;
+
+                  branch.full_date = date.toISOString().split('T')[0];
                   branch.date = date.getDate();
                   branch.month = date.getMonth() + 1; // Adding 1 as getMonth() is zero-based
                   branch.year = date.getFullYear();
