@@ -16,6 +16,8 @@ export class ApiService {
 
   private GET_CURRENT_DAY_DATA_API = 'http://localhost:3000/api/getCurrentDayData'; 
   private GET_CURRENT_MONTH_DATA_API = 'http://localhost:3000/api/getCurrentMonthData'; 
+  private GET_MONTH_PLAN = 'http://localhost:3000/api/getMonthPlan'; 
+
 
 
 
@@ -67,5 +69,10 @@ export class ApiService {
     const currentMonthDataSub = this.httpClient.post(`${this.GET_CURRENT_MONTH_DATA_API}/${userId}`,searchData);
     const currentMonthDataResp = await firstValueFrom(currentMonthDataSub);
     return currentMonthDataResp;
+  }
+  public async getMonthPlan(userId: any, searchData:any) { 
+    const monthSub = this.httpClient.post(`${this.GET_MONTH_PLAN}/${userId}`,searchData);
+    const monthResp = await firstValueFrom(monthSub);
+    return monthResp;
   }
 }

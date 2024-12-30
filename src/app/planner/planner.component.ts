@@ -33,7 +33,7 @@ export class PlannerComponent {
     this.userId = localStorage.getItem('loggedInUser');
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     const currentYear = new Date().getFullYear();
     // Populate years array from the current year to 10 years ahead
     for (let i = currentYear; i < currentYear + 20; i++) {
@@ -42,8 +42,54 @@ export class PlannerComponent {
     // Default selected year to current year
     this.selectedYear = currentYear;
     this.selectedMonth = this.months[new Date().getMonth()];
+    
+    const existingPlannerData= await this.apiService.getMonthPlan(this.userId, {
+      month: this.selectedMonth,
+      year: this.selectedYear,
+    });
+
+    this.monthlyIncome = existingPlannerData[0].monthly_income;
+    this.totalRemainingIncome = existingPlannerData[0].total_remaining_income;
+
+    if (Array.isArray(existingPlannerData)) {
+      this.dataTree  = this.transformExpensesByMainExpense(existingPlannerData);
+    } else {
+      console.error('Expected test to be an array, but got:', existingPlannerData);
+    }
+  
   }
 
+  transformExpensesByMainExpense(expenses: any): any[] {
+    // Ensure expenses is an array
+    if (!Array.isArray(expenses)) {
+      console.error('transformExpensesByMainExpense expects an array, but got:', expenses);
+      return [];
+    }
+  
+    const groupedExpenses: { [key: string]: any } = {};
+  
+    expenses.forEach(expense => {
+      const key = expense.main_expense;
+  
+      if (!groupedExpenses[key]) {
+        groupedExpenses[key] = {
+          data: expense.main_expense,
+          main_expense_amount: expense.main_expense_amount,
+          branches: []
+        };
+      }
+  
+      groupedExpenses[key].branches.push({
+        branches: [],
+        data: `${expense.sub_expense} (${expense.sub_expense_amount})`,
+        date: new Date(expense.full_date)
+      });
+    });
+  
+    return Object.values(groupedExpenses);
+  }
+  
+  
   addMainExpense() {
     if (this.inputData.trim() !== '') {
       this.dataTree.push({

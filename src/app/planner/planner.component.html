@@ -14,8 +14,8 @@
   </div>
   <p>
     Total Remaining Income: 
-    <span [ngStyle]="{'color': calculateRemainingIncome() < 0 ? 'red' : 'black'}">
-      {{ calculateRemainingIncome() | currency : "INR" }}
+    <span [ngStyle]="{'color': this.totalRemainingIncome < 0 ? 'red' : 'black'}">
+      {{ this.totalRemainingIncome | currency : "INR" }}
     </span>
   </p>
   <div class="top-right">
