@@ -1,9 +1,27 @@
-<mat-card class="calendar-card">
-  <h2>
-    {{selectedMonth}}
-    {{selectedYear}}
-  </h2>
-  <div class="calendar-container">
-    <mat-calendar (selectedChange)="onDateSelected($event)" class="custom-calendar"></mat-calendar>
+<div class="calendar">
+  <div class="calendar-header">
+    <button (click)="prevMonth()">&#9664;</button>
+    <span>{{ months[selectedMonthNumber] }} {{ selectedYear }}</span>
+    <button (click)="nextMonth()">&#9654;</button>
   </div>
-</mat-card>
+
+  <div class="calendar-grid">
+    <!-- Day Headers -->
+    <div *ngFor="let day of weekDays" class="day-header">{{ day }}</div>
+
+    <!-- Dates with Placeholder Cells for Stability -->
+    <ng-container *ngFor="let date of calendarDates">
+      <div *ngIf="date.day" class="date-cell">
+        <div>{{ date.day }}</div>
+        <div *ngIf="isDateInCurrentOrFuture(date.day)" class="value">
+          {{ totalRemainingIncomePerDay | currency: "₹" : 'symbol' : '1.0-0' }}
+        </div>
+      </div>
+
+      <!-- Placeholder Empty Cell styled as Disabled -->
+      <div *ngIf="!date.day" class="date-cell empty-cell">
+        <div class="disabled-text"></div>
+      </div>
+    </ng-container>
+  </div>
+</div>

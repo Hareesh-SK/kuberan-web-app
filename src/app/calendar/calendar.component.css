@@ -1,49 +1,93 @@
-html, body {
-  height: 80%;
-  margin: 30%;
-  padding: 10%;
-  overflow: hidden;
-}
-
-.calendar-card {
+.calendar {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  margin-left: 30%;
-  margin-right: 30%;
-  margin-top: 15%;
-  margin-bottom: 15%;
-  box-sizing: border-box;
-  width: 400%;
-  height: 50%;
+  justify-content: center;
+  height: 90vh;
+  margin-left: 3vh;
+  margin-top: 2vh;
+  width: 500px;
 }
 
-.calendar-container {
-  width: 80%;
-  height: 100%;
+.calendar-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
+  width: 730px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  margin-left: 449px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.custom-calendar {
-  width: 100%; /* Adjust this value as needed to make it smaller */
-  height: 80%; /* Adjust this value as needed to make it smaller */
-  max-width: 100%;
-  max-height: 100%;
+.calendar-header span {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.mat-calendar-body-cell {
-  border: 1px solid #ccc; /* Add border around each date cell */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 5px;
+  width: 300px;
+  height: 360px;
+  padding: 0 10px;
 }
 
-.mat-calendar-table {
-  width: 100%;
-  height: 80%;
+.day-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 5px;
+  background-color: #e9ecef;
+  border-radius: 5px;
 }
 
-.mat-calendar-content {
-  max-height: 80%;
-  overflow: hidden;
+.date-cell {
+  border: 1px solid #ccc;
+  height: 60px;
+  text-align: center;
+  padding: 5px;
+  display: flex;
+  width: 100px;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
+
+.date-cell:hover {
+  background-color: #f0f8ff;
+}
+
+.value {
+  font-size: 12px;
+  color: blue;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+button:hover {
+  color: #0056b3;
+}
+
+/* Styling for Empty Cells */
+.empty-cell {
+  background-color: #f7f6f6; /* Light gray background */
+  border: 1px #ccc; /* Dashed border to indicate disabled state */
+  pointer-events: none; /* Disable interaction */
+}
+
+.disabled-text {
+  color: #999; /* Muted gray text */
+  font-style: italic; /* Italic text for differentiation */
 }

@@ -25,7 +25,7 @@ export class ReportComponent implements OnInit {
 
   public async ngOnInit() {
     const currentYear = new Date().getFullYear();
-    for (let i = currentYear; i < currentYear + 20; i++) {
+    for (let i = 2020; i < currentYear + 20; i++) {
       this.years.push(i);
     }
     this.selectedYear = currentYear;
